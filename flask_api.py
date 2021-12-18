@@ -9,11 +9,10 @@ app = Flask(__name__)
 # Initialise the Api
 api = Api(app)
 
-# Variables needed
-# Country, aggregate or sector, 
+# If needed add a filter point to filter the endpoints for new postings
+# And offer a country list possibility
 # if aggregate new postings, total_postings or all_postings 
 # if sector specific sector or all sector
-# Use a try block with the pd read and if not working then return a 44 with message of country not available or user input error
 
 # aggregate_country_path = "https://raw.githubusercontent.com/hiring-lab/job_postings_tracker/master/{country}/aggregate_job_postings_{country}.csv"
 
