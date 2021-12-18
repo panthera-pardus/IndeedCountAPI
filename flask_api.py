@@ -13,20 +13,29 @@ api = Api(app)
 # Country, aggregate or sector, 
 # if aggregate new postings, total_postings or all_postings 
 # if sector specific sector or all sector
+# Use a try block with the pd read and if not working then return a 44 with message of country not available or user input error
 
-aggregate_country_path = "https://raw.githubusercontent.com/hiring-lab/job_postings_tracker/master/AU/aggregate_job_postings_AU.csv"
+# aggregate_country_path = "https://raw.githubusercontent.com/hiring-lab/job_postings_tracker/master/{country}/aggregate_job_postings_{country}.csv"
 
 #inherit the Resource object?
-class Country(Resource):
-    def get(self):
-        data = pd.read_csv(aggregate_country_path)
-        data = data.to_dict()
-        return {"data": data}, 200
+class AggregateCountryJobs(Resource):
+    
+    def get(self, selected_country):
+            data = pd.read_csv(f"https://raw.githubusercontent.com/hiring-lab/job_postings_tracker/master/{selected_country}/aggregate_job_postings_{selected_country}.csv")
+            data = data.to_dict()
+            return {"data": data}, 200
+
+class SectorCountryJobs(Resource):
+    
+    def get(self, selected_country):
+            data = pd.read_csv(f"https://raw.githubusercontent.com/hiring-lab/job_postings_tracker/master/{selected_country}/job_postings_by_sector_{selected_country}.csv")
+            data = data.to_dict()
+            return {"data": data}, 200
 
 
-api.add_resource(Country, "/country")
-
+# use the converter from here: https://uniwebsidad.com/libros/explore-flask/chapter-6/url-converters
+api.add_resource(AggregateCountryJobs, "/<string:selected_country>/aggregate") 
+api.add_resource(SectorCountryJobs, "/<string:selected_country>/sector")
 
 if __name__ == "__main__":
     app.run(debug = True)
-
